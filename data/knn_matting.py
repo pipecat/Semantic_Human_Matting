@@ -9,6 +9,7 @@ import cv2
 import os
 import argparse
 import pdb
+import timeit
 
 
 rgbDir = 'image'
@@ -27,14 +28,14 @@ def knn_matte(img, trimap, mylambda=100):
     background = (trimap < 0.01).astype(int)
     all_constraints = foreground + background
 
-    # print('Finding nearest neighbors')
+    print('Finding nearest neighbors')
     a, b = np.unravel_index(np.arange(m*n), (m, n))
     feature_vec = np.append(np.transpose(img.reshape(m*n,c)), [ a, b]/np.sqrt(m*m + n*n), axis=0).T
     nbrs = sklearn.neighbors.NearestNeighbors(n_neighbors=10, n_jobs=4).fit(feature_vec)
     knns = nbrs.kneighbors(feature_vec)[1]
 
     # Compute Sparse A
-    # print('Computing sparse A')
+    print('Computing sparse A')
     row_inds = np.repeat(np.arange(m*n), 10)
     col_inds = knns.reshape(m*n*10)
     vals = 1 - np.linalg.norm(feature_vec[row_inds] - feature_vec[col_inds], axis=1)/(c+2)
@@ -47,7 +48,7 @@ def knn_matte(img, trimap, mylambda=100):
     c = 2*mylambda*np.transpose(v)
     H = 2*(L + mylambda*D)
 
-    # print('Solving linear system for alpha')
+    print('Solving linear system for alpha')
     warnings.filterwarnings('error')
     alpha = []
     try:
@@ -69,7 +70,12 @@ def main(args):
     img = cv2.imread(img_name)
     trimap = cv2.imread(trimap_name)
     
+    start = timeit.default_timer()
     alpha = knn_matte(img, trimap)
+    end = timeit.default_timer()
+
+    print(end - start)
+
     cv2.imwrite(alpha_name, alpha*255)
     
 

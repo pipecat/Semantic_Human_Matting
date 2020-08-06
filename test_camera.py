@@ -82,6 +82,11 @@ def seg_process(args, image, net):
 
     bg = image
     bg_gray = np.multiply(1-alpha_np[..., np.newaxis], image)
+    #bg_alpha = 1 - alpha_np[..., np.newaxis]
+    #bg_alpha[bg_alpha<0] = 0
+
+    #bg_gray = np.multiply(bg_alpha, image)
+    
     bg_gray = cv2.cvtColor(bg_gray, cv2.COLOR_BGR2GRAY)
 
     bg[:,:,0] = bg_gray
