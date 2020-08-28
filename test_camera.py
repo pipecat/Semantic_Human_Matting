@@ -11,6 +11,7 @@ import argparse
 import numpy as np
 import os 
 import torch.nn.functional as F
+from model import network
 
 parser = argparse.ArgumentParser(description='human matting')
 parser.add_argument('--model', default='./', help='preTrained model')
@@ -43,7 +44,10 @@ def load_model(args):
     if args.without_gpu:
         myModel = torch.load(args.model, map_location=lambda storage, loc: storage)
     else:
-        myModel = torch.load(args.model)
+        #myModel = torch.load(args.model)
+        myModel = network.net()
+        myModel.load_state_dict(torch.load(args.model)['state_dict'])
+        
 
     myModel.eval()
     myModel.to(device)
@@ -97,7 +101,7 @@ def seg_process(args, image, net):
     # fg[fg>255] = 255
     # fg = fg.astype(np.uint8)
     # out = cv2.addWeighted(fg, 0.7, bg, 0.3, 0)
-    out = fg + bg
+    out = fg #+ bg
     out[out<0] = 0
     out[out>255] = 255
     out = out.astype(np.uint8)

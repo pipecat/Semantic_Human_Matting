@@ -238,7 +238,9 @@ def main():
             L_composition_ += L_composition.item()
             L_cross_ += L_cross.item()
 
+
         t1 = time.time()
+
 
         if epoch % args.save_epoch == 0:
 
