@@ -165,22 +165,30 @@ def loss_function(args, img, trimap_pre, trimap_gt, alpha_pre, alpha_gt):
 
 def main():
 
+    model = network.net()
+
     print("=============> Loading args")
     args = get_args()
 
     print("============> Environment init")
     if args.without_gpu:
         print("use CPU !")
-        device = torch.device('cpu')
+        device = torch.device('cpu')  
+        model.to(device)
     else:
         if torch.cuda.is_available():
-            device = torch.device('cuda')
+            device = torch.device("cuda:0")
+            print(device)
+            model.to(device)
+            #model = nn.DataParallel(model, device_ids=[0, 1])
+            #model = model.cuda()
         else:
-            print("No GPU is is available !")
+            print("No GPU is is available !")   
+            model.to(device)
 
     print("============> Building model ...")
-    model = network.net()    
-    model.to(device)
+    #model = network.net()    
+    #model.to(device)
 
     print("============> Loading datasets ...")
     train_data = getattr(dataset, args.trainData)(root_dir = args.dataDir, \

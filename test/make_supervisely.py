@@ -41,12 +41,15 @@ def genMask(dataset_root_dir="E:\\Supervisely Person Dataset",
             # RGB -> BGR，用于Opencv
             ann_render = ann_render[..., ::-1]
             # mask 保存目录不存在，则创建
-            save_dir = os.path.join(output_dir, dataset.name)
+            #save_dir = os.path.join(output_dir, dataset.name)
+            save_dir = output_dir
             if not os.path.exists(save_dir):
                 os.makedirs(save_dir)
             # 保存mask
-            mask_path = os.path.join(save_dir, item_name)
-            cv2.imwrite(mask_path, ann_render)
+            #print(item_name)
+            mask_path = os.path.join(save_dir, item_name.split('.')[0]+'.png')
+            mask = cv2.cvtColor(ann_render, cv2.COLOR_BGR2GRAY)
+            cv2.imwrite(mask_path, mask)
     pbar.close()
  
  

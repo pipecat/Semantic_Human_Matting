@@ -48,12 +48,12 @@ with open(train_list, 'rt') as f:
     names = f.readlines()
 
 for index, name in enumerate(names):
-    if index % 1000 == 0:
-        #print("{}% \done.".format(round(100*index/len(names))))
-        print("index: {}".format(index))
-    mask_name = os.path.join(maskdir, name.strip()[:-4] + ".png")
+    if index % 100 == 0:
+        print("{}% \done.".format(round(100*index/len(names))))
+        #print("index: {}".format(index))
+    mask_name = os.path.join(maskdir, name.split('.')[0] + ".png")
     #print(mask_name)
-    trimap_name = os.path.join(trimapdir, name.strip()[:-4] + ".png")
+    trimap_name = os.path.join(trimapdir, name.split('.')[0] + ".png")
     mask = cv2.imread(mask_name, 0)
     trimap = get_trimap(mask, size=(kernel_size, kernel_size))
     cv2.imwrite(trimap_name, trimap)

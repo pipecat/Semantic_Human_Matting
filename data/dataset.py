@@ -94,8 +94,8 @@ class human_matting_data(data.Dataset):
         # read files
         image, trimap, alpha = read_files(self.data_root, 
                                           file_name={'image': self.imgID[index].strip(),
-                                                     'trimap': self.imgID[index].strip()[:-4] +'.png',
-                                                     'alpha': self.imgID[index].strip()[:-4] +'.png'})
+                                                     'trimap': self.imgID[index].split('.')[0] +'.png',
+                                                     'alpha': self.imgID[index].split('.')[0] +'.png'})
         # NOTE ! ! !
         # trimap should be 3 classes : fg, bg. unsure
         trimap[trimap==0] = 0

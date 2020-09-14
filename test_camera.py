@@ -44,9 +44,9 @@ def load_model(args):
     if args.without_gpu:
         myModel = torch.load(args.model, map_location=lambda storage, loc: storage)
     else:
-        #myModel = torch.load(args.model)
-        myModel = network.net()
-        myModel.load_state_dict(torch.load(args.model)['state_dict'])
+        myModel = torch.load(args.model)
+        #myModel = network.net()
+        #myModel.load_state_dict(torch.load(args.model)['state_dict'])
         
 
     myModel.eval()
