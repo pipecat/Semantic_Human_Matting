@@ -1,3 +1,6 @@
+'''
+Author: pipecat
+'''
 import numpy as np
 import cv2
 
@@ -16,6 +19,7 @@ print("数据类型: {}".format(img.dtype))
 ret, mask = cv2.threshold(img[:, :, 3], 10, 255, cv2.THRESH_BINARY)
 
 cv2.imwrite('result.jpg',mask)
+cv2.imwrite('result_png.png', mask)
 
 cv2.namedWindow('mask', cv2.WINDOW_NORMAL)
 cv2.imshow('mask', mask)
